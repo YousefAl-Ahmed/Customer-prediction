@@ -6,6 +6,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
+from matplotlib import pyplot as plt
+import seaborn as sns
 
 
 import pandas as pd
@@ -33,12 +35,24 @@ def main():
     print("Number of customers tested:",len(y_test))
 
     # Print results
+    print_plot("shopping.csv",y_test,"Testing data")
+    print_plot("shopping.csv",predictions,"Prediction data")
+
     print(f"Correct prediction: {(y_test == predictions).sum()}")
     print(f"Incorrect predicion: {(y_test != predictions).sum()}")
     print(f"Customers who bought and were accurately identified (sensitivity): {100 * sensitivity:.2f}%")
     print(f"Customers who did not buy and were accurately identified (specificity): {100 * specificity:.2f}%")
 
+def print_plot(filename,revenue,title):
+    df = pd.read_csv(filename, delimiter=',')
+    sns.countplot(y=revenue,data=df);
+    plt.ylabel("Did/Did not buy");
+    plt.title(title)
+    plt.show()
+    
 
+    
+    
 #prepare the data
 def load_data(filename):
 
@@ -55,6 +69,8 @@ def load_data(filename):
     labels = df.iloc[:, 17].values
 
     #display(df.head())
+
+    print_plot("shopping.csv","Revenue","Actual data")
     return (evidence, labels)
 
    
